@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<h2 style="margin-top: 0">{{perfil.nome}}</h2>
+		<address>
+			<strong>Empresa: {{perfil.nome_empresa}}</strong><br>
+			<abbr title="Telefone">Telefone:</abbr>{{perfil.telefone}}<br>
+			<a href="mailto:{{ perfil.email }}">Email: {{perfil.email}}</a>
+		</address>
+		{% if ja_eh_contato %}
+			<div class="well well-sm">Vocês estão conectados!</div>
+		{% else %}
+			<a href="{% url 'convidar' perfil.id %}">Convidar</a>
+		{% endif %}	
+	</div>	
+</div>
+{% endblock %}

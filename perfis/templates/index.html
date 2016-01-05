@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h1>Bem vindo ao ConnectedIn!</h1>
+			<strong>Todos os Perfis:</strong>{% now "d/m/Y"%}</p>
+		</div>
+		{% if perfis %}
+			<ul>
+				{% for perfil in perfis %} <!-- template tag -->
+				<li>
+					<!-- template tag url para abstrair a rota -->
+					<a href="{% url 'exibir' perfil.id %}">{{ perfil.nome | upper }}</a>
+					/ {{ perfil.email | default:"E-mail não informado" }}
+				</li> 
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p>Nenhum Perfil encontrado!</p>
+		{% endif %}
+	</div>
+	<div class="panel panel-default">
+		{% with	total_de_convites=perfil_logado.convites_recebidos.count %}
+			{% if total_de_convites > 0 %}
+				<div class="panel-heading">
+					<strong>Você tem {{ total_de_convites }} 
+						convite{{ total_de_convites |pluralize }} aguardando aprovação... </strong>
+				</div>
+				<ul class="list-group">
+					{% for convite in perfil_logado.convites_recebidos.all %}
+					<li class="list-group-item">
+						{{ convite.solicitante.nome }}
+						<a href="{% url 'aceitar' convite.id %}" class="pull-right">Aceitar</a>
+					</li>	
+					{% endfor %}
+				</ul>
+			{% else %}
+				<div class="panel-body">
+					<p>Nenhum convite recebido :(</p>
+				</div>
+			{% endif %}
+		{% endwith %}
+	</div>
+	<div class="panel panel-default">
+		{% with	total_de_contatos=perfil_logado.contatos.count %}
+			{% if total_de_contatos > 0 %}
+				<div class="panel-heading">
+					<strong>Você tem {{ total_de_contatos }} 
+						contato{{ total_de_contatos |pluralize }} no seu perfil.</strong>
+				</div>
+				<ul class="list-group">
+					{% for contato in perfil_logado.contatos.all %}
+					<li class="list-group-item">
+						<a href="{% url 'exibir' contato.id %}">{{ contato.nome }}</a>
+					</li>	
+					{% endfor %}
+				</ul>
+			{% else %}
+				<div class="panel-body">
+					<p>Nenhum contato adicionado :(</p>
+				</div>
+			{% endif %}
+		{% endwith %}
+	</div>
+</div>
+{% endblock %}
